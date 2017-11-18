@@ -18,3 +18,8 @@ float4 TexturePixelShader(PixelInputType input) : SV_TARGET
 
     return textureColor;
 }
+
+cbuffer cbPerObject
+{
+    float4x4 WVP;
+};

@@ -14,3 +14,9 @@ float4 ColorPixelShader(PixelInputType input) : SV_TARGET
 {
     return input.color;
 }
+
+
+cbuffer cbPerObject
+{
+    float4x4 WVP;
+};
