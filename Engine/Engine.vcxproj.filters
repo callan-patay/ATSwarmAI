@@ -16,6 +16,15 @@
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{f4cf522d-c3a6-4bda-ab4c-51e491ef6420}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{994d1be4-074d-449d-95b6-a80aeb6b5b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Header Files">
+      <UniqueIdentifier>{2824c56d-2136-49db-a912-28d980eeb09b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Source Files">
+      <UniqueIdentifier>{3ea7f467-ef56-4378-b101-cf175744e115}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +63,9 @@
     <ClCompile Include="lightclass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Objects\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systemclass.h">
@@ -88,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="lightclass.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

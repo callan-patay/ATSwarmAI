@@ -10,6 +10,8 @@
 #include "lightshaderclass.h"
 #include "lightclass.h"
 
+#include <vector>
+
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
@@ -26,6 +28,7 @@ public:
 	void Shutdown();
 	bool Frame();
 
+	void addModel(ModelClass _model);
 private:
 	bool Render(float);
 
@@ -33,6 +36,9 @@ private:
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
+
+	std::vector<ModelClass*> m_models;
+	
 	ColorShaderClass* m_ColorShader;
 	TextureShaderClass* m_TextureShader;
 	LightShaderClass* m_LightShader;

@@ -52,7 +52,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -20.0f);
 
 	// Create the model object.
 	m_Model = new ModelClass;
@@ -68,6 +68,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
+
+	for (int i = 0; i < m_models.size(); i++)
+	{
+		m_models[i] = m_Model;
+	}
+
+
 
 	// Create the light shader object.
 	m_LightShader = new LightShaderClass;
@@ -125,6 +132,12 @@ void GraphicsClass::Shutdown()
 		delete m_Light;
 		m_Light = 0;
 	}
+
+	for (int i = 0; i < m_models.size(); i++)
+	{
+		m_models[i] = 0;
+	}
+
 
 	// Release the light shader object.
 	if (m_LightShader)
@@ -195,6 +208,12 @@ bool GraphicsClass::Frame()
 	return true;
 }
 
+void GraphicsClass::addModel(ModelClass _model)
+{
+	m_models.push_back(&_model);
+}
+
+
 
 bool GraphicsClass::Render(float rotation)
 {
@@ -232,6 +251,25 @@ bool GraphicsClass::Render(float rotation)
 	if (!result)
 	{
 		return false;
+	}
+
+
+
+	for (int i = 0; i < m_models.size(); i++)
+	{
+		m_models[i]->Render(m_Direct3D->GetDeviceContext());
+		result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_models[i]->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+			m_models[i]->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+		if (!result)
+		{
+			return false;
+		}
+
+		result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_models[i]->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_models[i]->GetTexture());
+		if (!result)
+		{
+			return false;
+		}
 	}
 
 	// Present the rendered scene to the screen.

@@ -1,4 +1,6 @@
 #include "systemclass.h"
+#include "GameObject.h"
+
 
 SystemClass::SystemClass()
 {
@@ -29,6 +31,18 @@ bool SystemClass::Initialize()
 	// Initialize the windows api.
 	InitializeWindows(screenWidth, screenHeight);
 
+	GameObject *testGameObject = new GameObject();
+	m_GameObjects.push_back(testGameObject);
+	GameObject *testGameObject1 = new GameObject();
+	m_GameObjects.push_back(testGameObject1);
+	GameObject *testGameObject2 = new GameObject();
+	m_GameObjects.push_back(testGameObject2);
+	GameObject *testGameObject3 = new GameObject();
+	m_GameObjects.push_back(testGameObject3);
+
+
+
+
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	m_Input = new InputClass;
 	if (!m_Input)
@@ -46,12 +60,31 @@ bool SystemClass::Initialize()
 		return false;
 	}
 
+
+	for (int i = 0; i < m_GameObjects.size(); i++)
+	{
+		m_Graphics->addModel(*m_GameObjects[i]->GetModel());
+	}
+
+
 	// Initialize the graphics object.
 	result = m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd);
 	if (!result)
 	{
 		return false;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	return true;
 }
@@ -116,6 +149,17 @@ void SystemClass::Run()
 			}
 		}
 
+	}
+
+
+
+
+
+
+
+	for (int i = 0; i < m_GameObjects.size(); i++)
+	{
+		m_GameObjects[i]->Tick();
 	}
 
 	return;

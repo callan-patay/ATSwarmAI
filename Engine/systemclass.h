@@ -5,8 +5,11 @@
 
 #include <Windows.h>
 
+#include <vector>
 #include "inputclass.h"
 #include "graphicsclass.h"
+
+class GameObject;
 
 class SystemClass
 {
@@ -33,6 +36,10 @@ private:
 
 	InputClass* m_Input;
 	GraphicsClass* m_Graphics;
+
+
+	std::vector<GameObject*> m_GameObjects;
+
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
