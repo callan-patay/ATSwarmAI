@@ -11,7 +11,8 @@ public:
 	GameObject();
 	~GameObject();
 
-	void SetPos(XMFLOAT3 _pos);
+
+	bool Initialize(ID3D11Device*, ID3D11DeviceContext* deviceContext, char* textureFilename);
 	void SetPos(float x, float y, float z);
 
 	void SetRot(float _rot);
@@ -19,7 +20,9 @@ public:
 	void SetPitch(float _pitch);
 	void SetRoll(float _roll);
 
-	XMFLOAT3 GetPos();
+	float getPosX();
+	float getPosY();
+	float getPosZ();
 	float GetRot();
 	float GetYaw();
 	float GetPitch();
@@ -31,9 +34,9 @@ public:
 
 
 	virtual void Tick();
-	virtual void Render(ID3D11DeviceContext*);
+	virtual void Render(ID3D11DeviceContext*, ID3D11Device*);
 private:
-	XMFLOAT3 m_pos;
+	float positionX, positionY, positionZ;
 	ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
 	bool m_alive;

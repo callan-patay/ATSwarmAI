@@ -1,4 +1,5 @@
 #include "graphicsclass.h"
+#include "GameObject.h"
 
 GraphicsClass::GraphicsClass()
 {
@@ -68,11 +69,29 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
+	GameObject* objMass = 0;
+	int posX = 0;
+	int posY = 0;
 
-	for (int i = 0; i < m_models.size(); i++)
+
+
+
+	for (int r = 0; r < 20; r++)
 	{
-		m_models[i] = m_Model;
+		for (int c = 0; c < 20; c++)
+		{
+			objMass = new GameObject();
+			objMass->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
+			objMass->SetPos(posX, posY, 0.0f);
+			m_gameObjects.push_back(objMass);
+			posY += 1;
+			
+		}
+		posY = 0;
+		posX += 1;
 	}
+
+
 
 
 
@@ -133,9 +152,10 @@ void GraphicsClass::Shutdown()
 		m_Light = 0;
 	}
 
-	for (int i = 0; i < m_models.size(); i++)
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
-		m_models[i] = 0;
+		delete m_gameObjects[i];
+		m_gameObjects[i] = 0;
 	}
 
 
@@ -190,6 +210,8 @@ bool GraphicsClass::Frame()
 	bool result;
 	static float rotation = 0.0f;
 
+	Tick();
+
 
 	// Update the rotation variable each frame.
 	rotation += (float)XM_PI * 0.01f;
@@ -208,11 +230,19 @@ bool GraphicsClass::Frame()
 	return true;
 }
 
-void GraphicsClass::addModel(ModelClass _model)
+void GraphicsClass::Tick()
 {
-	m_models.push_back(&_model);
+
+	for (int i = 0; i < m_gameObjects.size(); i++)
+	{
+		m_gameObjects[i]->Tick();
+	}
 }
 
+void GraphicsClass::moveCamera(float x, float y, float z)
+{
+	m_Camera->move(x, y, z);
+}
 
 
 bool GraphicsClass::Render(float rotation)
@@ -222,7 +252,7 @@ bool GraphicsClass::Render(float rotation)
 
 
 	// Clear the buffers to begin the scene.
-	m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	m_Direct3D->BeginScene(0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
@@ -236,36 +266,36 @@ bool GraphicsClass::Render(float rotation)
 	XMMatrixRotationY(rotation);
 	
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_Model->Render(m_Direct3D->GetDeviceContext());
+	//m_Model->Render(m_Direct3D->GetDeviceContext());
 
-	// Render the model using the texture shader.
-	// Render the model using the light shader.
-	result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
-	if (!result)
+	//// Render the model using the texture shader.
+	//// Render the model using the light shader.
+	//result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+	//	m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+	//if (!result)
+	//{
+	//	return false;
+	//}
+
+	//result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
+	//if (!result)
+	//{
+	//	return false;
+	//}
+
+
+
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
-		return false;
-	}
-
-	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
-	if (!result)
-	{
-		return false;
-	}
-
-
-
-	for (int i = 0; i < m_models.size(); i++)
-	{
-		m_models[i]->Render(m_Direct3D->GetDeviceContext());
-		result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_models[i]->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-			m_models[i]->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+		m_gameObjects[i]->Render(m_Direct3D->GetDeviceContext(), m_Direct3D->GetDevice());
+		result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_gameObjects[i]->GetModel()->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+			m_gameObjects[i]->GetModel()->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
 		if (!result)
 		{
 			return false;
 		}
 
-		result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_models[i]->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_models[i]->GetTexture());
+		result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_gameObjects[i]->GetModel()->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_gameObjects[i]->GetModel()->GetTexture());
 		if (!result)
 		{
 			return false;

@@ -17,6 +17,9 @@ const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
 
+class GameObject;
+
+
 class GraphicsClass
 {
 public:
@@ -27,8 +30,9 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	bool Frame();
+	void Tick();
+	void moveCamera(float x, float y, float z);
 
-	void addModel(ModelClass _model);
 private:
 	bool Render(float);
 
@@ -37,7 +41,7 @@ private:
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
 
-	std::vector<ModelClass*> m_models;
+	std::vector<GameObject*> m_gameObjects;
 	
 	ColorShaderClass* m_ColorShader;
 	TextureShaderClass* m_TextureShader;

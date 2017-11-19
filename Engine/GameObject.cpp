@@ -7,7 +7,9 @@ GameObject::GameObject()
 
 
 
-	m_pos = XMFLOAT3(2.0f, 3.0f, 0.0f);
+	positionX = 0;
+	positionY = 0;
+	positionZ = 0;
 }
 
 GameObject::~GameObject()
@@ -19,14 +21,29 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::SetPos(XMFLOAT3 _pos)
+bool GameObject::Initialize(ID3D11Device * _device, ID3D11DeviceContext* deviceContext, char* textureFilename)
 {
-	m_pos = _pos;
+	bool result;
+
+
+	model = new ModelClass();
+	if (!model)
+	{
+		return false;
+	}
+
+	result = model->Initialize(_device, deviceContext, "../Engine/Textures/stone01.tga");
+	return true;
+
+
 }
+
 
 void GameObject::SetPos(float x, float y, float z)
 {
-	m_pos = XMFLOAT3(x, y, z);
+	positionX = x;
+	positionY = y;
+	positionZ = z;
 }
 
 void GameObject::SetRot(float _rot)
@@ -50,10 +67,21 @@ void GameObject::SetRoll(float _roll)
 	m_roll = _roll;
 }
 
-XMFLOAT3 GameObject::GetPos()
+float GameObject::getPosX()
 {
-	return m_pos;
+	return positionX;
 }
+
+float GameObject::getPosY()
+{
+	return positionY;
+}
+
+float GameObject::getPosZ()
+{
+	return positionZ;
+}
+
 
 float GameObject::GetRot()
 {
@@ -87,14 +115,34 @@ ModelClass* GameObject::GetModel()
 
 void GameObject::Tick()
 {
-	m_pos.x += 0.01;
+	positionX += 0.1f;
+
+
+
+
+
+
+
+
+
+	if (positionX >= 30)
+	{
+		positionX = 0;
+	}
+
+
+
+
+
+
 }
 
-void GameObject::Render(ID3D11DeviceContext* deviceContext)
+void GameObject::Render(ID3D11DeviceContext* _deviceContext, ID3D11Device* _device)
 {
 	if (m_alive)
 	{
-		model->Render(deviceContext);
+		model->InitializeBuffers(_device, positionX, positionY, positionZ);
+		model->Render(_deviceContext);
 	}
 }
 

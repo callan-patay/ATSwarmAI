@@ -38,8 +38,6 @@ private:
 	GraphicsClass* m_Graphics;
 
 
-	std::vector<GameObject*> m_GameObjects;
-
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

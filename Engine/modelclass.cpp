@@ -23,7 +23,7 @@ bool ModelClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCon
 
 
 	// Initialize the vertex and index buffers.
-	result = InitializeBuffers(device);
+	result = InitializeBuffers(device, 0.0f, 0.0f, 0.0f);
 	if (!result)
 	{
 		return false;
@@ -65,7 +65,7 @@ ID3D11ShaderResourceView* ModelClass::GetTexture()
 	return m_Texture->GetTexture();
 }
 
-bool ModelClass::InitializeBuffers(ID3D11Device* device)
+bool ModelClass::InitializeBuffers(ID3D11Device* device, float posX, float posY, float posZ)
 {
 	VertexType* vertices;
 	unsigned long* indices;
@@ -93,17 +93,17 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	}
 
 	// Load the vertex array with data.
-	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
+	vertices[0].position = XMFLOAT3(posX - 1.0f, posY - 1.0f, posZ);  // Bottom left.
 	//vertices[0].color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
 	vertices[0].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
-	vertices[1].position = XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
+	vertices[1].position = XMFLOAT3(posX -0.5f, posY +0.5f, posZ);  // Top middle.
 //	vertices[1].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 	vertices[1].texture = XMFLOAT2(0.5f, 0.0f);
 	vertices[1].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
-	vertices[2].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
+	vertices[2].position = XMFLOAT3(posX, posY - 1.0f, posZ);  // Bottom right.
 	//vertices[2].color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 	vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
 	vertices[2].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
