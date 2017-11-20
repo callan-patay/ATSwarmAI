@@ -28,7 +28,8 @@ public:
 
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
-	bool InitializeBuffers(ID3D11Device*, float posX, float posY, float posZ);
+	void SetTexture();
+	bool InitializeBuffers(ID3D11Device*, XMFLOAT3);
 private:
 	
 	void ShutdownBuffers();

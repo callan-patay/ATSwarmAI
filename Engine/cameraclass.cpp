@@ -1,4 +1,9 @@
 #include "cameraclass.h"
+#include <iostream>
+#include <string>
+
+#include <Windows.h>
+
 
 CameraClass::CameraClass()
 {
@@ -80,6 +85,13 @@ void CameraClass::Render()
 	position.x = m_positionX;
 	position.y = m_positionY;
 	position.z = m_positionZ;
+
+	std::string str = std::to_string(m_positionX);
+//	LPCSTR lplp = str;
+
+
+	std::cout << str << std::endl;
+	OutputDebugStringA(str.c_str());
 
 	// Load it into a XMVECTOR structure.
 	positionVector = XMLoadFloat3(&position);

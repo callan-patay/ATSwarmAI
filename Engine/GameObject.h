@@ -29,6 +29,9 @@ public:
 	float GetRoll();
 
 
+	void SetTargetPos(XMFLOAT3);
+
+
 	void SetModel(ModelClass&);
 	ModelClass* GetModel();
 
@@ -37,8 +40,9 @@ public:
 	virtual void Render(ID3D11DeviceContext*, ID3D11Device*);
 private:
 	float positionX, positionY, positionZ;
+	XMFLOAT3 m_pos;
 	ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
 	bool m_alive;
-
+	XMFLOAT3 _targetPos;
 };

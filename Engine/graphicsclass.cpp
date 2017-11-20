@@ -83,6 +83,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 			objMass = new GameObject();
 			objMass->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
 			objMass->SetPos(posX, posY, 0.0f);
+			objMass->SetTargetPos(m_Camera->GetPosition());
 			m_gameObjects.push_back(objMass);
 			posY += 1;
 			
@@ -236,6 +237,7 @@ void GraphicsClass::Tick()
 	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
 		m_gameObjects[i]->Tick();
+		m_gameObjects[i]->SetTargetPos(m_Camera->GetPosition());
 	}
 }
 

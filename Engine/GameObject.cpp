@@ -19,6 +19,8 @@ GameObject::~GameObject()
 		delete model;
 		model = 0;
 	}
+
+
 }
 
 bool GameObject::Initialize(ID3D11Device * _device, ID3D11DeviceContext* deviceContext, char* textureFilename)
@@ -44,6 +46,8 @@ void GameObject::SetPos(float x, float y, float z)
 	positionX = x;
 	positionY = y;
 	positionZ = z;
+
+	m_pos = XMFLOAT3(x, y, z);
 }
 
 void GameObject::SetRot(float _rot)
@@ -103,6 +107,11 @@ float GameObject::GetRoll()
 	return m_roll;
 }
 
+void GameObject::SetTargetPos(XMFLOAT3  targetPos)
+{
+	_targetPos = targetPos;
+}
+
 void GameObject::SetModel(ModelClass &_model)
 {
 	model = &_model;
@@ -115,7 +124,6 @@ ModelClass* GameObject::GetModel()
 
 void GameObject::Tick()
 {
-	positionX += 0.1f;
 
 
 
@@ -125,9 +133,24 @@ void GameObject::Tick()
 
 
 
-	if (positionX >= 30)
+
+	if (_targetPos.x >= m_pos.x)
 	{
-		positionX = 0;
+		m_pos.x += 0.1;
+	}
+	else if (_targetPos.x <= m_pos.x)
+	{
+		m_pos.x -= 0.1;
+	}
+
+
+	if (_targetPos.x >= m_pos.y)
+	{
+		m_pos.y += 0.1;
+	}
+	else if (_targetPos.y <= m_pos.y)
+	{
+		m_pos.y -= 0.1;
 	}
 
 
@@ -141,7 +164,7 @@ void GameObject::Render(ID3D11DeviceContext* _deviceContext, ID3D11Device* _devi
 {
 	if (m_alive)
 	{
-		model->InitializeBuffers(_device, positionX, positionY, positionZ);
+		model->InitializeBuffers(_device, m_pos);
 		model->Render(_deviceContext);
 	}
 }
