@@ -32,8 +32,8 @@ public:
 	void SetTargetPos(XMFLOAT3);
 
 
-	void SetModel(ModelClass&);
-	ModelClass* GetModel();
+	//void SetModel(ModelClass&);
+	//ModelClass* GetModel();
 
 
 	virtual void Tick();
@@ -41,7 +41,7 @@ public:
 private:
 	float positionX, positionY, positionZ;
 	XMFLOAT3 m_pos;
-	ModelClass* model;
+	//ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
 	bool m_alive;
 	XMFLOAT3 _targetPos;

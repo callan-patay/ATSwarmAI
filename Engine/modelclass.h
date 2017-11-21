@@ -18,18 +18,27 @@ private:
 		XMFLOAT3 normal;
 	};
 
+	struct InstanceType
+	{
+		XMFLOAT3 position;
+	};
+
 public:
 	ModelClass();
 	ModelClass(const ModelClass&);
 	~ModelClass();
-	bool Initialize(ID3D11Device*, ID3D11DeviceContext* deviceContext, char* textureFilename);
+	bool Initialize(ID3D11Device*);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
+
+	int GetVertexCount();
+	int GetInstanceCount();
+	void updatePos(int i);
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
-	void SetTexture();
-	bool InitializeBuffers(ID3D11Device*, XMFLOAT3);
+	void SetTexture(TextureClass*);
+	bool InitializeBuffers(ID3D11Device*,int, int, XMFLOAT3);
 private:
 	
 	void ShutdownBuffers();
@@ -37,8 +46,8 @@ private:
 	bool LoadTexture(ID3D11Device*, ID3D11DeviceContext*, char*);
 	void ReleaseTexture();
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-	int m_vertexCount, m_indexCount;
+	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer, *m_instanceBuffer;
+	int m_vertexCount, m_indexCount, m_instanceCount;
 	TextureClass* m_Texture;
 };
 

@@ -3,7 +3,7 @@
 
 GameObject::GameObject()
 {
-	model = 0;
+	//model = 0;
 
 
 
@@ -14,11 +14,11 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	if (model)
+	/*if (model)
 	{
 		delete model;
 		model = 0;
-	}
+	}*/
 
 
 }
@@ -28,13 +28,13 @@ bool GameObject::Initialize(ID3D11Device * _device, ID3D11DeviceContext* deviceC
 	bool result;
 
 
-	model = new ModelClass();
-	if (!model)
+//	model = new ModelClass();
+	/*if (!model)
 	{
 		return false;
 	}
-
-	result = model->Initialize(_device, deviceContext, "../Engine/Textures/stone01.tga");
+*/
+//	result = model->Initialize(_device);
 	return true;
 
 
@@ -112,15 +112,15 @@ void GameObject::SetTargetPos(XMFLOAT3  targetPos)
 	_targetPos = targetPos;
 }
 
-void GameObject::SetModel(ModelClass &_model)
-{
-	model = &_model;
-}
-
-ModelClass* GameObject::GetModel()
-{
-	return model;
-}
+//void GameObject::SetModel(ModelClass &_model)
+//{
+//	//model = &_model;
+//}
+//
+//ModelClass* GameObject::GetModel()
+//{
+//	//return model;
+//}
 
 void GameObject::Tick()
 {
@@ -134,24 +134,24 @@ void GameObject::Tick()
 
 
 
-	if (_targetPos.x >= m_pos.x)
-	{
-		m_pos.x += 0.1;
-	}
-	else if (_targetPos.x <= m_pos.x)
-	{
-		m_pos.x -= 0.1;
-	}
+	//if (_targetPos.x >= m_pos.x)
+	//{
+	//	m_pos.x += 0.1;
+	//}
+	//else if (_targetPos.x <= m_pos.x)
+	//{
+	//	m_pos.x -= 0.1;
+	//}
 
 
-	if (_targetPos.x >= m_pos.y)
-	{
-		m_pos.y += 0.1;
-	}
-	else if (_targetPos.y <= m_pos.y)
-	{
-		m_pos.y -= 0.1;
-	}
+	//if (_targetPos.x >= m_pos.y)
+	//{
+	//	m_pos.y += 0.1;
+	//}
+	//else if (_targetPos.y <= m_pos.y)
+	//{
+	//	m_pos.y -= 0.1;
+	//}
 
 
 
@@ -164,8 +164,8 @@ void GameObject::Render(ID3D11DeviceContext* _deviceContext, ID3D11Device* _devi
 {
 	if (m_alive)
 	{
-		model->InitializeBuffers(_device, m_pos);
-		model->Render(_deviceContext);
+		//model->InitializeBuffers(_device, m_pos);
+		//model->Render(_deviceContext);
 	}
 }
 

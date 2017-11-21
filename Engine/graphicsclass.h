@@ -18,7 +18,7 @@ const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
 
 class GameObject;
-
+class TextureClass;
 
 class GraphicsClass
 {
@@ -40,6 +40,7 @@ private:
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
+	TextureClass* m_texture;
 
 	std::vector<GameObject*> m_gameObjects;
 	

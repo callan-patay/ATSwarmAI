@@ -1,5 +1,6 @@
 #include "graphicsclass.h"
 #include "GameObject.h"
+#include "textureclass.h"
 
 GraphicsClass::GraphicsClass()
 {
@@ -21,6 +22,7 @@ GraphicsClass::GraphicsClass(const GraphicsClass& other)
 
 GraphicsClass::~GraphicsClass()
 {
+
 
 }
 
@@ -54,36 +56,44 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// Set the initial position of the camera.
 	m_Camera->SetPosition(0.0f, 0.0f, -20.0f);
+	
+
+	m_texture = new TextureClass();
+	m_texture->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
 
 	// Create the model object.
-	m_Model = new ModelClass;
-	if (!m_Model)
-	{
-		return false;
-	}
-
-	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
+	m_Model = new ModelClass();
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
+
+	result = m_Model->Initialize(m_Direct3D->GetDevice());
+	m_Model->SetTexture(m_texture);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
 	GameObject* objMass = 0;
 	int posX = 0;
 	int posY = 0;
 
+	int row = 200;
+	int col = 200;
 
 
-
-	for (int r = 0; r < 20; r++)
+	for (int r = 0; r < row; r++)
 	{
-		for (int c = 0; c < 20; c++)
+		for (int c = 0; c < col; c++)
 		{
 			objMass = new GameObject();
-			objMass->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
+			//objMass->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
 			objMass->SetPos(posX, posY, 0.0f);
 			objMass->SetTargetPos(m_Camera->GetPosition());
+			//objMass->GetModel()->SetTexture(m_texture);
 			m_gameObjects.push_back(objMass);
 			posY += 1;
 			
@@ -92,7 +102,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		posX += 1;
 	}
 
-
+	m_Model->InitializeBuffers(m_Direct3D->GetDevice(), row, col, XMFLOAT3(0.0f, 0.0f, 0.0f));
 
 
 
@@ -155,11 +165,17 @@ void GraphicsClass::Shutdown()
 
 	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
+		//m_gameObjects[i]->GetModel()->Shutdown();
 		delete m_gameObjects[i];
 		m_gameObjects[i] = 0;
 	}
 
 
+	if (m_texture)
+	{
+		delete m_texture;
+		m_texture = 0;
+	}
 	// Release the light shader object.
 	if (m_LightShader)
 	{
@@ -181,12 +197,6 @@ void GraphicsClass::Shutdown()
 	}
 
 	// Release the model object.
-	if (m_Model)
-	{
-		m_Model->Shutdown();
-		delete m_Model;
-		m_Model = 0;
-	}
 
 	// Release the camera object.
 	if (m_Camera)
@@ -266,43 +276,27 @@ bool GraphicsClass::Render(float rotation)
 
 	// Rotate the world matrix by the rotation value so that the triangle will spin.
 	XMMatrixRotationY(rotation);
-	
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	//m_Model->Render(m_Direct3D->GetDeviceContext());
+	m_Model->Render(m_Direct3D->GetDeviceContext());
+	// Render the model using the texture shader.
+	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix,
+		projectionMatrix, m_Model->GetTexture());
 
-	//// Render the model using the texture shader.
-	//// Render the model using the light shader.
-	//result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-	//	m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
-	//if (!result)
+	//for (int i = 0; i < m_gameObjects.size(); i++)
 	//{
-	//	return false;
+	//	m_gameObjects[i]->Render(m_Direct3D->GetDeviceContext(), m_Direct3D->GetDevice());
+	//	result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_gameObjects[i]->GetModel()->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+	//		m_gameObjects[i]->GetModel()->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+	//	if (!result)
+	//	{
+	//		return false;
+	//	}
+
+	//	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_gameObjects[i]->GetModel()->GetIndexCount(), m_gameObjects[i]->GetModel()->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix, m_gameObjects[i]->GetModel()->GetTexture());
+	//	if (!result)
+	//	{
+	//		return false;
+	//	}
 	//}
-
-	//result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
-	//if (!result)
-	//{
-	//	return false;
-	//}
-
-
-
-	for (int i = 0; i < m_gameObjects.size(); i++)
-	{
-		m_gameObjects[i]->Render(m_Direct3D->GetDeviceContext(), m_Direct3D->GetDevice());
-		result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_gameObjects[i]->GetModel()->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-			m_gameObjects[i]->GetModel()->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
-		if (!result)
-		{
-			return false;
-		}
-
-		result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_gameObjects[i]->GetModel()->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_gameObjects[i]->GetModel()->GetTexture());
-		if (!result)
-		{
-			return false;
-		}
-	}
 
 	// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
