@@ -81,8 +81,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	int posX = 0;
 	int posY = 0;
 
-	int row = 200;
-	int col = 200;
+	int row = 100;
+	int col = 100;
 
 
 	for (int r = 0; r < row; r++)

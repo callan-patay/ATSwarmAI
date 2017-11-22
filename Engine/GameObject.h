@@ -39,10 +39,11 @@ public:
 	virtual void Tick();
 	virtual void Render(ID3D11DeviceContext*, ID3D11Device*);
 private:
-	float positionX, positionY, positionZ;
-	XMFLOAT3 m_pos;
+	XMFLOAT3 m_pos, m_scale;
 	//ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
 	bool m_alive;
 	XMFLOAT3 _targetPos;
+
+	XMMATRIX m_worldMat, m_rotMat, m_fudge;
 };

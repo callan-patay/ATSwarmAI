@@ -5,11 +5,11 @@ GameObject::GameObject()
 {
 	//model = 0;
 
+	m_worldMat = XMMatrixIdentity();
+	m_fudge = XMMatrixIdentity();
 
-
-	positionX = 0;
-	positionY = 0;
-	positionZ = 0;
+	m_scale = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::~GameObject()
@@ -43,9 +43,6 @@ bool GameObject::Initialize(ID3D11Device * _device, ID3D11DeviceContext* deviceC
 
 void GameObject::SetPos(float x, float y, float z)
 {
-	positionX = x;
-	positionY = y;
-	positionZ = z;
 
 	m_pos = XMFLOAT3(x, y, z);
 }
@@ -73,17 +70,17 @@ void GameObject::SetRoll(float _roll)
 
 float GameObject::getPosX()
 {
-	return positionX;
+	return m_pos.x;
 }
 
 float GameObject::getPosY()
 {
-	return positionY;
+	return m_pos.y;
 }
 
 float GameObject::getPosZ()
 {
-	return positionZ;
+	return m_pos.z;
 }
 
 
@@ -127,9 +124,9 @@ void GameObject::Tick()
 
 
 
-
-
-
+	XMMATRIX scaleMat = XMMatrixScalingFromVector(m_scale);
+	m_rotMat = XMMatrixRotationRollPitchYaw(m_yaw, m_pitch, m_roll);
+	
 
 
 
