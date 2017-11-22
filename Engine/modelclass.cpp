@@ -1,5 +1,5 @@
 #include "modelclass.h"
-
+#include "GameObject.h"
 ModelClass::ModelClass()
 {
 	m_vertexBuffer = 0;
@@ -54,6 +54,38 @@ void ModelClass::Render(ID3D11DeviceContext* deviceContext)
 	RenderBuffers(deviceContext);
 
 	return;
+}
+
+void ModelClass::updatePositions(ID3D11DeviceContext * deviceContext, std::vector<GameObject*>& objs)
+{
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT result;
+	ZeroMemory(&mappedResource, sizeof(mappedResource));
+
+
+
+	size_t copySize = sizeof(GameObject) * objs.size();
+
+	result = deviceContext->Map(m_instanceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (!result)
+	{
+		return;
+	}
+	memcpy(mappedResource.pData, &objs[0]->getPos(), copySize);
+
+	XMFLOAT3* pos;
+
+	pos = (XMFLOAT3*)mappedResource.pData;
+
+
+	pos = &objs[0]->getPos();
+
+
+
+	deviceContext->Unmap(m_instanceBuffer, 0);
+
+
+
 }
 
 int ModelClass::GetVertexCount()
@@ -214,10 +246,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device, int _row, int _col, XMF
 
 
 	// Set up the description of the instance buffer.
-	instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	instanceBufferDesc.ByteWidth = sizeof(InstanceType) * m_instanceCount;
 	instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	instanceBufferDesc.CPUAccessFlags = 0;
+	instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	instanceBufferDesc.MiscFlags = 0;
 	instanceBufferDesc.StructureByteStride = 0;
 
@@ -226,6 +258,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device, int _row, int _col, XMF
 	instanceData.SysMemPitch = 0;
 	instanceData.SysMemSlicePitch = 0;
 
+	
 
 
 	// Create the instance buffer.
@@ -319,6 +352,8 @@ bool ModelClass::LoadTexture(ID3D11Device* device, ID3D11DeviceContext* deviceCo
 	{
 		return false;
 	}
+
+
 
 	// Initialize the texture object.
 	result = m_Texture->Initialize(device, deviceContext, filename);

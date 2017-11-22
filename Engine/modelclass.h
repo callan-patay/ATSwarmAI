@@ -6,6 +6,9 @@
 #include <directxmath.h>
 using namespace DirectX;
 #include "textureclass.h"
+#include <vector>
+
+class GameObject;
 
 class ModelClass
 {
@@ -31,7 +34,7 @@ public:
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
-
+	void updatePositions(ID3D11DeviceContext*, std::vector<GameObject*>& objs);
 	int GetVertexCount();
 	int GetInstanceCount();
 	void updatePos(int i);

@@ -244,11 +244,13 @@ bool GraphicsClass::Frame()
 void GraphicsClass::Tick()
 {
 
-	for (int i = 0; i < m_gameObjects.size(); i++)
-	{
-		m_gameObjects[i]->Tick();
-		m_gameObjects[i]->SetTargetPos(m_Camera->GetPosition());
-	}
+	//for (int i = 0; i < m_gameObjects.size(); i++)
+	//{
+	//	m_gameObjects[i]->Tick();
+	//	m_gameObjects[i]->SetTargetPos(m_Camera->GetPosition());
+	//}
+
+	m_Model->updatePositions(m_Direct3D->GetDeviceContext(), m_gameObjects);
 }
 
 void GraphicsClass::moveCamera(float x, float y, float z)

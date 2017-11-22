@@ -104,6 +104,11 @@ float GameObject::GetRoll()
 	return m_roll;
 }
 
+XMFLOAT3 GameObject::getPos()
+{
+	return m_pos;
+}
+
 void GameObject::SetTargetPos(XMFLOAT3  targetPos)
 {
 	_targetPos = targetPos;
@@ -124,7 +129,7 @@ void GameObject::Tick()
 
 
 
-	XMMATRIX scaleMat = XMMatrixScalingFromVector(m_scale);
+	//XMMATRIX scaleMat = XMMatrixScalingFromVector(m_scale);
 	m_rotMat = XMMatrixRotationRollPitchYaw(m_yaw, m_pitch, m_roll);
 	
 

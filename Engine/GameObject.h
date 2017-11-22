@@ -27,7 +27,7 @@ public:
 	float GetYaw();
 	float GetPitch();
 	float GetRoll();
-
+	XMFLOAT3 getPos();
 
 	void SetTargetPos(XMFLOAT3);
 
