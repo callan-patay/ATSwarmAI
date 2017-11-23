@@ -61,24 +61,22 @@ void ModelClass::updatePositions(ID3D11DeviceContext * deviceContext, std::vecto
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT result;
 	ZeroMemory(&mappedResource, sizeof(mappedResource));
-
-
-
 	size_t copySize = sizeof(GameObject) * objs.size();
-
 	result = deviceContext->Map(m_instanceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (!result)
 	{
 		return;
 	}
-	memcpy(mappedResource.pData, &objs[0]->getPos(), copySize);
+	//memcpy(mappedResource.pData, &objs[0]->getPos(), copySize);
+	std::vector<InstanceType*> pos;
+	pos.reserve(objs.size());
 
-	XMFLOAT3* pos;
+	for (int i = 0; i < objs.size(); i++)
+	{
 
-	pos = (XMFLOAT3*)mappedResource.pData;
-
-
-	pos = &objs[0]->getPos();
+	pos[i] = (InstanceType*)mappedResource.pData;
+	pos[i]->position = objs[i]->getPos();
+	}
 
 
 

@@ -156,7 +156,7 @@ void GameObject::Tick()
 	//}
 
 
-
+	m_pos.x++;
 
 
 
