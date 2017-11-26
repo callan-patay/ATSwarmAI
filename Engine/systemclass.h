@@ -37,6 +37,9 @@ private:
 	InputClass* m_Input;
 	GraphicsClass* m_Graphics;
 
+	float deltaTime;
+	DWORD playTime;
+
 
 };
 

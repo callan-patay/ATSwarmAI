@@ -59,32 +59,16 @@ void ModelClass::Render(ID3D11DeviceContext* deviceContext)
 void ModelClass::updatePositions(ID3D11DeviceContext * deviceContext, std::vector<GameObject*>& objs)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT result;
-	//ZeroMemory(&mappedResource, sizeof(mappedResource));
-	//size_t copySize = sizeof(GameObject) * objs.size();
+	deviceContext->Map(m_instanceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
-	result = deviceContext->Map(m_instanceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	
-	if (!result)
-	{
-		return;
-	}
-	InstanceType* instancePos;
-	instancePos = (InstanceType*)mappedResource.pData;
-	//memcpy(mappedResource.pData, &objs[0]->getPos(), copySize);
-	//std::vector<InstanceType*> pos;
-	//pos.reserve(objs.size());
+	InstanceType* instancePos = reinterpret_cast<InstanceType*>(mappedResource.pData);;
 
 	for (int i = 0; i < objs.size(); i++)
 	{
 		instancePos[i].position = objs[i]->getPos();
 	}
 
-
-
 	deviceContext->Unmap(m_instanceBuffer, 0);
-
-
 
 }
 

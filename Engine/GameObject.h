@@ -36,7 +36,7 @@ public:
 	//ModelClass* GetModel();
 
 
-	virtual void Tick();
+	virtual void Tick(float* deltaTime);
 	virtual void Render(ID3D11DeviceContext*, ID3D11Device*);
 private:
 	XMFLOAT3 m_pos, m_scale;

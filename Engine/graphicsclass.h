@@ -29,8 +29,8 @@ public:
 
 	bool Initialize(int, int, HWND);
 	void Shutdown();
-	bool Frame();
-	void Tick();
+	bool Frame(float* deltaTime);
+	void Tick(float* deltaTime);
 	void moveCamera(float x, float y, float z);
 
 private:

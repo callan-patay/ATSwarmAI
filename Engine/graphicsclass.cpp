@@ -216,12 +216,12 @@ void GraphicsClass::Shutdown()
 }
 
 
-bool GraphicsClass::Frame()
+bool GraphicsClass::Frame(float* deltaTime)
 {
 	bool result;
 	static float rotation = 0.0f;
 
-	Tick();
+	Tick(deltaTime);
 
 
 	// Update the rotation variable each frame.
@@ -241,14 +241,14 @@ bool GraphicsClass::Frame()
 	return true;
 }
 
-void GraphicsClass::Tick()
+void GraphicsClass::Tick(float* deltaTime)
 {
 
-	//for (int i = 0; i < m_gameObjects.size(); i++)
-	//{
-	//	m_gameObjects[i]->Tick();
-	//	m_gameObjects[i]->SetTargetPos(m_Camera->GetPosition());
-	//}
+	for (int i = 0; i < m_gameObjects.size(); i++)
+	{
+		m_gameObjects[i]->Tick(deltaTime);
+		m_gameObjects[i]->SetTargetPos(m_Camera->GetPosition());
+	}
 
 	m_Model->updatePositions(m_Direct3D->GetDeviceContext(), m_gameObjects);
 }

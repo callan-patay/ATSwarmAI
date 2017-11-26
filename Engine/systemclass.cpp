@@ -177,8 +177,10 @@ bool SystemClass::Frame()
 		m_Graphics->moveCamera(0.0f, 0.0f, -0.2f);
 	}
 
-
-
+	
+	DWORD currentTime = GetTickCount();
+	deltaTime = min((float)(currentTime - playTime) / 1000.0f, 0.1f);
+	playTime = currentTime;
 
 
 
@@ -187,7 +189,7 @@ bool SystemClass::Frame()
 
 
 	// Do the frame processing for the graphics object.
-	result = m_Graphics->Frame();
+	result = m_Graphics->Frame(&deltaTime);
 	if (!result)
 	{
 		return false;

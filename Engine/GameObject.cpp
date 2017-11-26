@@ -114,49 +114,40 @@ void GameObject::SetTargetPos(XMFLOAT3  targetPos)
 	_targetPos = targetPos;
 }
 
-//void GameObject::SetModel(ModelClass &_model)
-//{
-//	//model = &_model;
-//}
-//
-//ModelClass* GameObject::GetModel()
-//{
-//	//return model;
-//}
 
-void GameObject::Tick()
+
+void GameObject::Tick(float* deltaTime)
 {
 
 
 
 	//XMMATRIX scaleMat = XMMatrixScalingFromVector(m_scale);
 	m_rotMat = XMMatrixRotationRollPitchYaw(m_yaw, m_pitch, m_roll);
-	
 
 
 
 
-	//if (_targetPos.x >= m_pos.x)
-	//{
-	//	m_pos.x += 0.1;
-	//}
-	//else if (_targetPos.x <= m_pos.x)
-	//{
-	//	m_pos.x -= 0.1;
-	//}
+	if (_targetPos.x >= m_pos.x)
+	{
+		m_pos.x += 2* *deltaTime;
+	}
+	if (_targetPos.x <= m_pos.x)
+	{
+		m_pos.x -= 2 * *deltaTime;
+	}
 
 
-	//if (_targetPos.x >= m_pos.y)
-	//{
-	//	m_pos.y += 0.1;
-	//}
-	//else if (_targetPos.y <= m_pos.y)
-	//{
-	//	m_pos.y -= 0.1;
-	//}
+	if (_targetPos.x >= m_pos.y)
+	{
+		m_pos.y += 2 * *deltaTime;
+	}
+	 if (_targetPos.y <= m_pos.y)
+	{
+		m_pos.y -= 2 * *deltaTime;
+	}
 
 
-	m_pos.x++;
+	//m_pos.x += 0.2;
 
 
 
