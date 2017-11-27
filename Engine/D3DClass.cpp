@@ -1,5 +1,5 @@
 #include "D3DClass.h"
-
+#include <DirectXColors.h>
 D3DClass::D3DClass()
 {
 	m_swapChain = 0;
@@ -416,7 +416,7 @@ void D3DClass::BeginScene(float red, float green, float blue, float alpha)
 	color[3] = alpha;
 
 	// Clear the back buffer.
-	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+	m_deviceContext->ClearRenderTargetView(m_renderTargetView, DirectX::Colors::Teal);
 
 	// Clear the depth buffer.
 	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
