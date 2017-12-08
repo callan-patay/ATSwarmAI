@@ -104,6 +104,11 @@ float GameObject::GetRoll()
 	return m_roll;
 }
 
+XMMATRIX GameObject::getWorldMat()
+{
+	return m_worldMat;
+}
+
 XMFLOAT3 GameObject::getPos()
 {
 	return m_pos;
@@ -122,7 +127,7 @@ void GameObject::Tick(float* deltaTime)
 
 
 	//XMMATRIX scaleMat = XMMatrixScalingFromVector(m_scale);
-	m_rotMat = XMMatrixRotationRollPitchYaw(m_yaw, m_pitch, m_roll);
+//	m_rotMat = XMMatrixRotationRollPitchYaw(m_yaw, m_pitch, m_roll);
 
 
 

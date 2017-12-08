@@ -10,6 +10,7 @@
 #include "lightshaderclass.h"
 #include "lightclass.h"
 
+
 #include <vector>
 
 const bool FULL_SCREEN = false;
@@ -18,6 +19,7 @@ const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
 
 class GameObject;
+class Tile;
 class TextureClass;
 
 class GraphicsClass
@@ -43,7 +45,7 @@ private:
 	TextureClass* m_texture;
 
 	std::vector<GameObject*> m_gameObjects;
-	
+	std::vector<Tile*> m_tiles;
 	ColorShaderClass* m_ColorShader;
 	TextureShaderClass* m_TextureShader;
 	LightShaderClass* m_LightShader;

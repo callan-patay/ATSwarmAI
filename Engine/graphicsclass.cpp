@@ -1,5 +1,6 @@
 #include "graphicsclass.h"
 #include "GameObject.h"
+#include "Tile.h"
 #include "textureclass.h"
 
 GraphicsClass::GraphicsClass()
@@ -103,6 +104,27 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	m_Model->InitializeBuffers(m_Direct3D->GetDevice(), row, col, XMFLOAT3(0.0f, 0.0f, 0.0f));
+
+	row = 10;
+	col = 10;
+	posX = 0;
+	posY = 0;
+
+
+
+	Tile* newTile = 0;
+
+	for (int r = 0; r < row; r++)
+	{
+		for (int c = 0; c < col; c++)
+		{
+			newTile = new Tile(posX, posY);
+			m_tiles.push_back(newTile);
+			posY += 10;
+		}
+		posY = 0;
+		posX += 10;
+	}
 
 
 
@@ -279,6 +301,12 @@ bool GraphicsClass::Render(float rotation)
 	// Rotate the world matrix by the rotation value so that the triangle will spin.
 	XMMatrixRotationY(rotation);
 	m_Model->Render(m_Direct3D->GetDeviceContext());
+
+
+	//for (auto& Tile : m_tiles)
+	//{
+	//	worldMatrix *= Tile->getWorldMat();
+	//}
 	// Render the model using the texture shader.
 	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix,
 		projectionMatrix, m_Model->GetTexture());

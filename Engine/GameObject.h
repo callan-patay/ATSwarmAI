@@ -3,7 +3,6 @@
 #include <d3d11.h>
 using namespace DirectX;
 
-class ModelClass;
 
 class GameObject
 {
@@ -27,6 +26,7 @@ public:
 	float GetYaw();
 	float GetPitch();
 	float GetRoll();
+	XMMATRIX getWorldMat();
 	XMFLOAT3 getPos();
 
 	void SetTargetPos(XMFLOAT3);
@@ -38,7 +38,7 @@ public:
 
 	virtual void Tick(float* deltaTime);
 	virtual void Render(ID3D11DeviceContext*, ID3D11Device*);
-private:
+protected:
 	XMFLOAT3 m_pos, m_scale;
 	//ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
