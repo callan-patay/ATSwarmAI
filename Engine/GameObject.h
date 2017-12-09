@@ -1,6 +1,7 @@
 #pragma once
 #include <directxmath.h>
 #include <d3d11.h>
+#include <vector>
 using namespace DirectX;
 
 
@@ -28,10 +29,18 @@ public:
 	float GetRoll();
 	XMMATRIX getWorldMat();
 	XMFLOAT3 getPos();
+	XMFLOAT3 getVel();
 
 	void SetTargetPos(XMFLOAT3);
 
-
+	XMFLOAT3 Seperation();
+	XMFLOAT3 Alignment();
+	XMFLOAT3 Cohesion();
+	void applyForce(XMFLOAT3 _force);
+	void flock();
+	void Box();
+	void setBoids(std::vector<GameObject*> _boids);
+	float distance(XMFLOAT3 _pos, XMFLOAT3 _otherPos);
 	//void SetModel(ModelClass&);
 	//ModelClass* GetModel();
 
@@ -39,11 +48,16 @@ public:
 	virtual void Tick(float* deltaTime);
 	virtual void Render(ID3D11DeviceContext*, ID3D11Device*);
 protected:
-	XMFLOAT3 m_pos, m_scale;
+	XMFLOAT3 m_pos, m_scale, m_vel, m_acc;
 	//ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
+	float m_size;
 	bool m_alive;
 	XMFLOAT3 _targetPos;
-
+	float maxForce, minForce, maxSpeed, minSpeed;
+	float neighbourDistance, seperation;
+	float cohesionMultiplier, separationMultiplier, alignmentMultiplier;
 	XMMATRIX m_worldMat, m_rotMat, m_fudge;
+
+	std::vector<GameObject*> m_boids;
 };

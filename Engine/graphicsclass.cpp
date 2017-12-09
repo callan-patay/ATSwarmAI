@@ -103,6 +103,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		posX += 1;
 	}
 
+
+
+	for (int i = 0; i < m_gameObjects.size(); i++)
+	{
+		m_gameObjects[i]->setBoids(m_gameObjects);
+	}
+
 	m_Model->InitializeBuffers(m_Direct3D->GetDevice(), row, col, XMFLOAT3(0.0f, 0.0f, 0.0f));
 
 	row = 10;
