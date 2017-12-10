@@ -49,7 +49,7 @@ public:
 	virtual void Tick(float* deltaTime);
 	virtual void Render(ID3D11DeviceContext*, ID3D11Device*);
 protected:
-	XMFLOAT3 m_pos, m_scale, m_vel, m_acc;
+	XMFLOAT3 m_pos, m_scale, m_vel, m_acc, m_drag;
 	//ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
 	float m_size;

@@ -21,6 +21,7 @@ GameObject::GameObject()
 	separationMultiplier = 1.0f;
 	cohesionMultiplier = 1.0f;
 
+	m_drag = XMFLOAT3(0.2f, 0.2f, 0.2f);
 	m_size = 300;
 	float angle = 0.1 + (rand() % (int)(359 - 0.1 + 1));
 	m_pos = XMFLOAT3((float)(rand() % (int)m_size), (float)(rand() % (int)m_size), 0);
@@ -307,8 +308,8 @@ void GameObject::Tick(float* deltaTime)
 	//m_acc.y *= *deltaTime;
 	//m_acc.z *= *deltaTime;
 
-	m_vel.x += m_acc.x * *deltaTime;
-	m_vel.y += m_acc.y * *deltaTime;
+	m_vel.x += (m_acc.x - m_drag.x*m_vel.x) * *deltaTime;
+	m_vel.y += (m_acc.y - m_drag.y*m_vel.y) * *deltaTime;
 	//m_vel.z += m_acc.z * *deltaTime;
 
 		XMVECTOR v1 = XMLoadFloat3(&m_vel);

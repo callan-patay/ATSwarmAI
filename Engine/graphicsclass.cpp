@@ -146,7 +146,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		posY += 10;
 	}
 
-	setVectors();
+	//setVectors();
 
 	// Create the light shader object.
 	m_LightShader = new LightShaderClass;
@@ -295,10 +295,6 @@ void GraphicsClass::Tick(float* deltaTime)
 				m_gameObjects[i]->applyForce(m_tiles[t]->getDirection());
 			}
 		}
-
-
-
-
 
 		m_gameObjects[i]->Tick(deltaTime);
 
