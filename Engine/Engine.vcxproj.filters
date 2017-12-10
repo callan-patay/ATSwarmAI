@@ -135,5 +135,14 @@
     <Image Include="..\Textures\stone01.tga">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\kerrigan.tga">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Zergling.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\zergling.tga">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

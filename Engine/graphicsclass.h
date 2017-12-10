@@ -34,6 +34,11 @@ public:
 	bool Frame(float* deltaTime);
 	void Tick(float* deltaTime);
 	void moveCamera(float x, float y, float z);
+	bool checkColliding(GameObject* _gameObj, Tile* _tile);
+	void setVectors();
+
+
+
 
 private:
 	bool Render(float);
@@ -43,6 +48,9 @@ private:
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
 	TextureClass* m_texture;
+	int tileWidth = 30;
+	int tileHeight = 30;
+
 
 	std::vector<GameObject*> m_gameObjects;
 	std::vector<Tile*> m_tiles;

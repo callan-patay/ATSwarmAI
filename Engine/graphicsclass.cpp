@@ -56,11 +56,11 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -20.0f);
+	m_Camera->SetPosition(147.3f, 147.3f, -372.0f);
 	
 
 	m_texture = new TextureClass();
-	m_texture->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
+	m_texture->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/kerrigan.tga");
 
 	// Create the model object.
 	m_Model = new ModelClass();
@@ -92,7 +92,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		{
 			objMass = new GameObject();
 			//objMass->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../Engine/Textures/stone01.tga");
-			objMass->SetPos(posX, posY, 0.0f);
+	//		objMass->SetPos(posX, posY, 0.0f);
 			objMass->SetTargetPos(m_Camera->GetPosition());
 			//objMass->GetModel()->SetTexture(m_texture);
 			m_gameObjects.push_back(objMass);
@@ -112,8 +112,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	m_Model->InitializeBuffers(m_Direct3D->GetDevice(), row, col, XMFLOAT3(0.0f, 0.0f, 0.0f));
 
-	row = 10;
-	col = 10;
+	tileWidth = 30;
+	tileHeight = 30;
 	posX = 0;
 	posY = 0;
 
@@ -121,19 +121,32 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	Tile* newTile = 0;
 
-	for (int r = 0; r < row; r++)
+	for (int r = 0; r < tileHeight; r++)
 	{
-		for (int c = 0; c < col; c++)
+		for (int c = 0; c < tileWidth; c++)
 		{
 			newTile = new Tile(posX, posY);
+
+			if (r + c * tileHeight == 13)
+			{
+				newTile->setTarget(true);
+			}
+
+
 			m_tiles.push_back(newTile);
-			posY += 10;
+			posX += 10;
+
+
+
+
+
+
 		}
-		posY = 0;
-		posX += 10;
+		posX = 0;
+		posY += 10;
 	}
 
-
+	setVectors();
 
 	// Create the light shader object.
 	m_LightShader = new LightShaderClass;
@@ -275,9 +288,26 @@ void GraphicsClass::Tick(float* deltaTime)
 
 	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
+		for (int t = 0; t < m_tiles.size(); t++)
+		{
+			if (checkColliding(m_gameObjects[i], m_tiles[t]))
+			{
+				m_gameObjects[i]->applyForce(m_tiles[t]->getDirection());
+			}
+		}
+
+
+
+
+
 		m_gameObjects[i]->Tick(deltaTime);
+
 		m_gameObjects[i]->SetTargetPos(m_Camera->GetPosition());
 	}
+
+
+
+
 
 	m_Model->updatePositions(m_Direct3D->GetDeviceContext(), m_gameObjects);
 }
@@ -285,6 +315,162 @@ void GraphicsClass::Tick(float* deltaTime)
 void GraphicsClass::moveCamera(float x, float y, float z)
 {
 	m_Camera->move(x, y, z);
+}
+
+bool GraphicsClass::checkColliding(GameObject * _gameObj, Tile * _tile)
+{
+	if ((_gameObj->getPos().x + _gameObj->getOwnSize()) >= _tile->getPos().x
+		&& _gameObj->getPos().x <= (_tile->getPos().x + _tile->getOwnSize()))
+	{
+		//check both objects Y positions and size
+		if ((_gameObj->getPos().y + _gameObj->getOwnSize()) >= _tile->getPos().y
+			&& _gameObj->getPos().y <= (_tile->getPos().y + _tile->getOwnSize()))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void GraphicsClass::setVectors()
+{
+	bool complete = false;
+	int targetTile;
+	int tilechecker = 0;
+	for (int i = 0; i < m_tiles.size(); i++)
+	{
+		m_tiles[i]->setStamp(0);
+	}
+
+
+	for (int i = 0; i < m_tiles.size(); i++)
+	{
+		if (m_tiles[i]->isTarget())
+		{
+			targetTile = i;
+
+			m_tiles[i + 1]->setStamp(1);
+			m_tiles[i - 1]->setStamp(1);
+			m_tiles[i + tileHeight]->setStamp(1);
+			m_tiles[i - tileHeight]->setStamp(1);
+		}
+		
+	}
+
+	while (tilechecker != tileWidth * tileHeight)
+	{
+
+
+		for (int i = 0; i < m_tiles.size(); i++)
+		{
+
+				if (m_tiles[i + 1])
+				{
+					if (i + 1 != targetTile && m_tiles[i + 1]->getStamp() < m_tiles[i]->getStamp())
+					{
+						m_tiles[i + 1]->setStamp(m_tiles[i]->getStamp() + 1);
+					}
+				}
+
+				if (m_tiles[i - 1])
+				{
+					if (i - 1 != targetTile && m_tiles[i - 1]->getStamp() < m_tiles[i]->getStamp())
+					{
+						m_tiles[i - 1]->setStamp(m_tiles[i]->getStamp() + 1);
+					}
+				}
+
+				if (m_tiles[i + tileWidth])
+				{
+					if (i + tileWidth != targetTile && m_tiles[i + tileWidth]->getStamp() < m_tiles[i]->getStamp())
+					{
+						m_tiles[i + tileWidth]->setStamp(m_tiles[i]->getStamp() + 1);
+					}
+				}
+
+				if (m_tiles[i - tileWidth])
+				{
+					if (i - tileWidth != targetTile && m_tiles[i - tileWidth]->getStamp() < m_tiles[i]->getStamp())
+					{
+						m_tiles[i - tileWidth]->setStamp(m_tiles[i]->getStamp() + 1);
+					}
+				}
+		}
+
+
+
+		for (int i = 0; i < m_tiles.size(); i++)
+		{
+			if (!m_tiles[i]->isTarget() && m_tiles[i]->getStamp() != 0)
+			{
+				tilechecker++;
+			}
+			else
+			{
+				tilechecker = 0;
+			}
+		}
+
+		if (tilechecker == tileWidth * tileHeight -1)
+		{
+			complete = true;
+		}
+
+	}
+
+
+	for (int i = 0; i < m_tiles.size(); i++)
+	{
+
+		if (m_tiles[i + 1])
+		{
+			if (m_tiles[i + 1]->getStamp() < m_tiles[i]->getStamp())
+			{
+				m_tiles[i]->setDirection(XMFLOAT3(1.0f, 0.0f, 0.0f));
+			}
+
+		}
+
+		if (m_tiles[i - 1])
+		{
+			if (m_tiles[i - 1]->getStamp() < m_tiles[i]->getStamp())
+			{
+				m_tiles[i]->setDirection(XMFLOAT3(-1.0f, 0.0f, 0.0f));
+			}
+
+		}
+
+		if (m_tiles[i + tileWidth])
+		{
+			if (m_tiles[i + tileWidth]->getStamp() < m_tiles[i]->getStamp())
+			{
+				m_tiles[i]->setDirection(XMFLOAT3(0.0f, 1.0f, 0.0f));
+			}
+
+		}
+
+		if (m_tiles[i - tileWidth])
+		{
+
+			if (m_tiles[i - tileWidth]->getStamp() < m_tiles[i]->getStamp());
+			{
+				m_tiles[i]->setDirection(XMFLOAT3(0.0f, -1.0f, 0.0f));
+			}
+
+
+		}
+
+
+	}
+
+
+
+
+
+
+
+
+
 }
 
 

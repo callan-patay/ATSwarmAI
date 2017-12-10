@@ -182,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Textures\stone01.tga" />
+    <Image Include="Textures\kerrigan.tga" />
+    <Image Include="Textures\Zergling.png" />
+    <Image Include="Textures\zergling.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

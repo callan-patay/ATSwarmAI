@@ -15,19 +15,24 @@ public:
 
 
 	void init();
+	XMFLOAT3 getDirection();
 
-
-
-
+	void setDirection(XMFLOAT3 _dir);
+	void setTarget(bool _targ);
+	void setObstacle(bool _obs);
+	bool isTarget();
+	bool isObstacle();
+	int getStamp();
+	void setStamp(int _stmp);
 
 
 
 private:
-	XMFLOAT2 size;
+
 	XMFLOAT3 direction;
-
-
-
+	bool obstacle = false;
+	bool target = false;
+	int stamp = 0;
 
 
 };

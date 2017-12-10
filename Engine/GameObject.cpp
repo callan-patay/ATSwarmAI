@@ -23,9 +23,10 @@ GameObject::GameObject()
 
 	m_size = 300;
 	float angle = 0.1 + (rand() % (int)(359 - 0.1 + 1));
-	m_vel = XMFLOAT3(cos(angle), sin(angle), 0.0f);
+	m_pos = XMFLOAT3((float)(rand() % (int)m_size), (float)(rand() % (int)m_size), 0);
+//	m_vel = XMFLOAT3(cos(angle), sin(angle), 0.0f);
 	m_acc = XMFLOAT3(0.0f, 0.0f, 0.0f);
-
+	m_ownSize = 1.0f;
 
 }
 
@@ -141,6 +142,11 @@ XMFLOAT3 GameObject::getVel()
 	return m_vel;
 }
 
+float GameObject::getOwnSize()
+{
+	return m_ownSize;
+}
+
 void GameObject::SetTargetPos(XMFLOAT3  targetPos)
 {
 	_targetPos = targetPos;
@@ -234,6 +240,11 @@ void GameObject::applyForce(XMFLOAT3 _force)
 	m_acc.x += _force.x;
 	m_acc.y += _force.y;
 	m_acc.z += _force.z;
+
+	XMVECTOR v1 = XMLoadFloat3(&m_acc);
+	XMVECTOR X = XMVector3ClampLength(v1, minSpeed, maxSpeed);
+	XMStoreFloat3(&m_acc, X);
+
 }
 
 void GameObject::flock()
@@ -269,14 +280,7 @@ void GameObject::Box()
 		m_pos.y -= m_size;
 	}
 
-	if (m_pos.z < 0)
-	{
-		m_pos.z += m_size;
-	}
-	else if (m_pos.z > m_size)
-	{
-		m_pos.z -= m_size;
-	}
+
 }
 
 void GameObject::setBoids(std::vector<GameObject*> _boids)
@@ -303,13 +307,19 @@ void GameObject::Tick(float* deltaTime)
 	//m_acc.y *= *deltaTime;
 	//m_acc.z *= *deltaTime;
 
-	//m_vel.x += m_acc.x;
-	//m_vel.y += m_acc.y;
-	//m_vel.z += m_acc.z;
+	m_vel.x += m_acc.x * *deltaTime;
+	m_vel.y += m_acc.y * *deltaTime;
+	//m_vel.z += m_acc.z * *deltaTime;
+
+		XMVECTOR v1 = XMLoadFloat3(&m_vel);
+		XMVECTOR X = XMVector3ClampLength(v1, minSpeed, maxSpeed);
+		XMStoreFloat3(&m_vel, X);
 
 	m_pos.x += m_vel.x;
 	m_pos.y += m_vel.y;
-	m_pos.z += m_vel.z;
+	//m_pos.z += m_vel.z;
+
+
 
 
 

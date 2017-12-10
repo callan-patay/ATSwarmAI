@@ -30,6 +30,7 @@ public:
 	XMMATRIX getWorldMat();
 	XMFLOAT3 getPos();
 	XMFLOAT3 getVel();
+	float getOwnSize();
 
 	void SetTargetPos(XMFLOAT3);
 
@@ -52,6 +53,7 @@ protected:
 	//ModelClass* model;
 	float m_yaw, m_pitch, m_roll, m_rot;
 	float m_size;
+	float m_ownSize;
 	bool m_alive;
 	XMFLOAT3 _targetPos;
 	float maxForce, minForce, maxSpeed, minSpeed;
